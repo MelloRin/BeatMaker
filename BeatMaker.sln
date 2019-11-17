@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DirectX", "DirectX\DirectX.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourcePacker", "ResourcePacker\ResourcePacker.csproj", "{3AE56A01-B7BF-4784-B850-58C8D61DFAC4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unitTester", "..\..\C#unitTester\unitTester\unitTester.csproj", "{4F6E42CD-D3A4-493E-8E7B-605097939C58}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{3AE56A01-B7BF-4784-B850-58C8D61DFAC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3AE56A01-B7BF-4784-B850-58C8D61DFAC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3AE56A01-B7BF-4784-B850-58C8D61DFAC4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
