@@ -1,14 +1,18 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.IO;
+using System.Text;
 
-namespace FileManager
+namespace MelloRin.FileManager
 {
-    class PackageManager
+    class FileReader
     {
         public static string ReadSaveFile()
         {
             //데이터를 복호화 한 후, string 으로 넘기고 게임단에서 데이터 가공!
+
+
+
 
 
             throw new NotImplementedException();
@@ -16,6 +20,11 @@ namespace FileManager
 
         public static ConcurrentDictionary<string, MemoryStream> ReadGameData()
         {
+
+
+
+
+
             throw new NotImplementedException();
         }
     }
