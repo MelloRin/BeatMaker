@@ -1,21 +1,57 @@
-﻿using System;
+﻿using MelloRin.FileManager.lib.Encrypt;
+using MelloRin.FileManager.lib.UUID;
+using System;
 using System.Collections.Concurrent;
 using System.IO;
 using System.Text;
 
 namespace MelloRin.FileManager
 {
-    class FileReader
+    public class FileReader
     {
-        public static string ReadSaveFile()
+        private static readonly string currentDir = Directory.GetCurrentDirectory();
+
+        private static readonly string dataPackageName = Path.Combine(currentDir, "resource.dat");
+        private static readonly string saveFileName = Path.Combine(currentDir, "savedata.mlr");
+
+        public static string ReadSettingData()
         {
-            //데이터를 복호화 한 후, string 으로 넘기고 게임단에서 데이터 가공!
+            if (File.Exists(saveFileName))
+            {
+                StreamReader reader = new StreamReader(saveFileName);
 
+                char[] rawUUID = new char[64];
 
+                reader.Read(rawUUID, 0, rawUUID.Length);
 
+                string UUID = UUIDManager.ReadUUID(Encoding.UTF8.GetBytes(rawUUID));
 
+                string rawData = reader.ReadToEnd();
 
-            throw new NotImplementedException();
+                return AES256Manager.decrypt(rawData, UUID);
+            }
+            else
+                throw new FileNotFoundException();
+        }
+
+        public static void SaveSettingData(string data)
+        {
+            string fakeUUID = UUIDManager.MakeUUID();
+
+            string UUID = UUIDManager.ReadUUID(Encoding.UTF8.GetBytes(fakeUUID));
+
+            string rawData = AES256Manager.encrypt(data, UUID);
+
+            if (File.Exists(saveFileName))
+            {
+                if (File.Exists(saveFileName))
+                    File.Delete(saveFileName);
+            }
+
+            StreamWriter writer = new StreamWriter(saveFileName);
+
+            writer.Write(fakeUUID + rawData);
+            writer.Close();
         }
 
         public static ConcurrentDictionary<string, MemoryStream> ReadGameData()

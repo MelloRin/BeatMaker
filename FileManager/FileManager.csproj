@@ -42,7 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="lib\AES256Manager.cs" />
+    <Compile Include="lib\Encrypt\AES256Manager.cs" />
     <Compile Include="FileListReader.cs" />
     <Compile Include="FileReader.cs" />
     <Compile Include="lib\UUID\UUIDManager.cs" />
