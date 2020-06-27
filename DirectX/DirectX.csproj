@@ -53,6 +53,9 @@
     <Reference Include="SharpDX, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.4.2.0\lib\net45\SharpDX.dll</HintPath>
     </Reference>
+    <Reference Include="SharpDX.Desktop, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
+      <HintPath>..\packages\SharpDX.Desktop.4.2.0\lib\net45\SharpDX.Desktop.dll</HintPath>
+    </Reference>
     <Reference Include="SharpDX.Direct2D1, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b4dcf0f35e5521f1, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDX.Direct2D1.4.2.0\lib\net45\SharpDX.Direct2D1.dll</HintPath>
     </Reference>
@@ -73,6 +76,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -81,7 +86,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="D3DHandler.cs" />
+    <Compile Include="D2D\D2DFont.cs" />
+    <Compile Include="D2D\D2DSprite.cs" />
+    <Compile Include="D2D\Font\FontData.cs" />
+    <Compile Include="D2D\Font\FontLoader.cs" />
+    <Compile Include="D2D\Sprite\ClickableSprite.cs" />
+    <Compile Include="D2D\Sprite\SpriteData.cs" />
+    <Compile Include="D3D\D3DHandler.cs" />
+    <Compile Include="lib\ClickEvent\ClickEventStack.cs" />
+    <Compile Include="lib\ClickEvent\ClickEventStackData.cs" />
+    <Compile Include="lib\IDrawable.cs" />
+    <Compile Include="lib\IListable.cs" />
+    <Compile Include="lib\ITask.cs" />
+    <Compile Include="lib\ListData.cs" />
+    <Compile Include="lib\RenderTaskHandler.cs" />
+    <Compile Include="lib\TaskQueue.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
