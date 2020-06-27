@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FileManager;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,7 +10,7 @@ namespace ResourcePacker
         public List<Dir> dirList = new List<Dir>();
         public List<ResFile> fileList = new List<ResFile>();
 
-        private Dir baseDir = new Dir("");
+        private readonly Dir baseDir = new Dir("");
 
         private short toAllocateID = 1;
 
@@ -20,11 +21,12 @@ namespace ResourcePacker
                 Dir currentSearchingDir = new Dir(toAllocateID++, cutRestDir(targetDir, prevDir), parentDir);
 
                 dirList.Add(currentSearchingDir);
+                FileManagerCore.logger.Info(this, "packing dir : " + currentSearchingDir.dirName);
 
                 foreach (string currentFile in Directory.EnumerateFiles(targetDir, "*"))
                 {
                     string fileName = cutRestDir(currentFile, targetDir);
-
+                    FileManagerCore.logger.Info(this, "packing file : " + fileName);
                     MemoryStream ms = new MemoryStream();
 
                     StreamReader reader = new StreamReader(currentFile);

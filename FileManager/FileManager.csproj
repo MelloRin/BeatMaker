@@ -68,6 +68,7 @@
     <Compile Include="lib\Directory\ResFile.cs" />
     <Compile Include="lib\Encrypt\AES256Manager.cs" />
     <Compile Include="FileManagerCore.cs" />
+    <Compile Include="lib\Log\Logger.cs" />
     <Compile Include="lib\UUID\UUIDManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

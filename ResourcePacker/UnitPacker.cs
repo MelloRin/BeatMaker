@@ -26,11 +26,11 @@ namespace ResourcePacker
 
             fakeUUID = UUIDManager.MakeUUID();
             UUID = UUIDManager.ConvertUUID(fakeUUID);
-            Console.WriteLine("uuid = {0}", Encoding.UTF8.GetString(UUID));
         }
 
         public byte[] getPackedData()
         {
+            FileManagerCore.logger.Info(this, "start Packing... target Dir = " + targetDir);
             resFileListReader.searchDir(targetDir, targetDir, null);
 
             Dictionary<string, short> nameInfo = _getNameDataList();
@@ -42,12 +42,7 @@ namespace ResourcePacker
 
             long encHeaderLen = _getHeaderLen(nameInfo);
 
-            Console.WriteLine("headerLen = {0}", encHeaderLen);
-
             byte[] headerLenData = BitConverter.GetBytes(encHeaderLen);
-            Console.WriteLine("headerLenByteLen = {0}", headerLenData.Length);
-
-            Console.WriteLine("headerLenByteLenPosition = {0}", ms.Position);
 
             ms.Write(headerLenData, 0, headerLenData.Length);
             FileManagerCore.byteBoundaryWork(ms, true);
@@ -63,8 +58,6 @@ namespace ResourcePacker
             byte[] vOut = BitConverter.GetBytes((long)nameInfo.Count);
             headerMaker.Write(vOut, 0, vOut.Length);
             FileManagerCore.byteBoundaryWork(headerMaker, true);
-            Console.WriteLine("namedata len = {0}", nameInfo.Count);
-
 
             foreach (string name in nameInfo.Keys)
             {
@@ -88,8 +81,6 @@ namespace ResourcePacker
             headerMaker.Write(vOut, 0, vOut.Length);
             FileManagerCore.byteBoundaryWork(headerMaker, true);
 
-            Console.WriteLine("dirData len = {0}", resFileListReader.dirList.Count);
-
             foreach (Dir dir in resFileListReader.dirList)
             {
                 vOut = BitConverter.GetBytes(dir.id);
@@ -111,8 +102,6 @@ namespace ResourcePacker
             vOut = BitConverter.GetBytes((long)resFileListReader.fileList.Count);
             headerMaker.Write(vOut, 0, vOut.Length);
             FileManagerCore.byteBoundaryWork(headerMaker, true);
-
-            Console.WriteLine("fileData len = {0}", resFileListReader.fileList.Count);
 
             foreach (ResFile file in resFileListReader.fileList)
             {
@@ -137,12 +126,11 @@ namespace ResourcePacker
                 FileManagerCore.byteBoundaryWork(headerMaker, true);
             }
 
+            FileManagerCore.logger.Info(this, "file paccking done!");
+
             ms.Position = resumePosition;
 
             string encData = AES256Manager.encode(headerMaker.ToArray(), UUID);
-
-            headerMaker.WriteTo(new StreamWriter(@"C:\test\headertest.bin").BaseStream);
-
             headerMaker.Close();
 
             byte[] encHeader = Encoding.UTF8.GetBytes(encData);
@@ -151,6 +139,8 @@ namespace ResourcePacker
 
             byte[] result = ms.ToArray();
             ms.Close();
+
+            FileManagerCore.logger.Info(this, "header Write done!");
 
             return result;
         }
