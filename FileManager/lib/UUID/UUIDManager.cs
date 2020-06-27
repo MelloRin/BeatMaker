@@ -6,7 +6,7 @@ namespace MelloRin.FileManager.lib.UUID
 {
     public class UUIDManager
     {
-        private static string GenerateUUID()
+        private static string _generateUUID()
         {
             Guid guid = Guid.NewGuid();
 
@@ -20,14 +20,10 @@ namespace MelloRin.FileManager.lib.UUID
                 uuidBuilder.Append(c);
             }
 
-
-            //FOR TEST
-            Console.WriteLine("real UUID\n{0}", uuidBuilder.ToString());
-
             return uuidBuilder.ToString();
         }
 
-        public static string ReadUUID(byte[] rawKey)
+        public static byte[] ConvertUUID(byte[] rawKey)
         {
             MemoryStream byteBuffer = new MemoryStream(rawKey.Length / 2);
 
@@ -42,12 +38,12 @@ namespace MelloRin.FileManager.lib.UUID
 
             byteBuffer.Close();
 
-            return Encoding.UTF8.GetString(array);
+            return array;
         }
 
-        public static string MakeUUID()
+        public static byte[] MakeUUID()
         {
-            string UUID = GenerateUUID();
+            string UUID = _generateUUID();
             Random seed = new Random();
 
             byte[] uuidArr = Encoding.UTF8.GetBytes(UUID);
@@ -63,23 +59,23 @@ namespace MelloRin.FileManager.lib.UUID
                 if (isEven)
                 {
                     byteBuffer.WriteByte(uuidArr[i]);
-                    byteBuffer.WriteByte((byte)seed.Next('1', 'f'));
+                    byteBuffer.WriteByte((byte)seed.Next('1', '9'));
                 }
                 else
                 {
-                    byteBuffer.WriteByte((byte)seed.Next('1', 'f'));
+                    byteBuffer.WriteByte((byte)seed.Next('1', '9'));
                     byteBuffer.WriteByte(uuidArr[i]);
                 }
             }
 
-            byteBuffer.WriteByte((byte)seed.Next('1', 'f'));
+            byteBuffer.WriteByte((byte)seed.Next('1', '9'));
 
 
             byte[] array = byteBuffer.ToArray();
 
             byteBuffer.Close();
 
-            return Encoding.UTF8.GetString(array);
+            return array;
         }
     }
 }

@@ -7,7 +7,7 @@ namespace MelloRin.FileManager.lib.Encrypt
 {
     public class AES256Manager
     {
-        public static string decrypt(string input, string key)
+        public static string decode(string input, byte[] key)
         {
             RijndaelManaged aes = new RijndaelManaged
             {
@@ -15,7 +15,7 @@ namespace MelloRin.FileManager.lib.Encrypt
                 BlockSize = 128,
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7,
-                Key = Encoding.UTF8.GetBytes(key),
+                Key = key,
                 IV = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
             };
 
@@ -35,12 +35,7 @@ namespace MelloRin.FileManager.lib.Encrypt
             return Encoding.UTF8.GetString(xBuff);
         }
 
-        public static string encrypt(string Input, string key)
-        {
-            return encrypt(Encoding.UTF8.GetBytes(Input), key);
-        }
-
-        public static string encrypt(byte[] input, string key)
+        public static byte[] decodeToByteArray(string input, byte[] key)
         {
             RijndaelManaged aes = new RijndaelManaged
             {
@@ -48,7 +43,42 @@ namespace MelloRin.FileManager.lib.Encrypt
                 BlockSize = 128,
                 Mode = CipherMode.CBC,
                 Padding = PaddingMode.PKCS7,
-                Key = Encoding.UTF8.GetBytes(key),
+                Key = key,
+                IV = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
+            };
+
+            var decrypt = aes.CreateDecryptor();
+            byte[] xBuff = null;
+
+            using (var ms = new MemoryStream())
+            {
+                using (var cs = new CryptoStream(ms, decrypt, CryptoStreamMode.Write))
+                {
+                    byte[] xXml = Convert.FromBase64String(input);
+                    cs.Write(xXml, 0, xXml.Length);
+                }
+                xBuff = ms.ToArray();
+            }
+
+            return xBuff;
+        }
+
+
+
+        public static string encode(string input, byte[] key)
+        {
+            return encode(Encoding.UTF8.GetBytes(input), key);
+        }
+
+        public static string encode(byte[] input, byte[] key)
+        {
+            RijndaelManaged aes = new RijndaelManaged
+            {
+                KeySize = 256,
+                BlockSize = 128,
+                Mode = CipherMode.CBC,
+                Padding = PaddingMode.PKCS7,
+                Key = key,
                 IV = new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
             };
 

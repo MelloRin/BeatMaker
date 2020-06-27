@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace ResourcePacker
 {
@@ -10,6 +7,13 @@ namespace ResourcePacker
     {
         static void Main(string[] args)
         {
+            UnitPacker unitPacker = new UnitPacker("..\\..\\..\\res");
+
+            byte[] result = unitPacker.getPackedData();
+
+            File.WriteAllBytes(FileManager.FileManagerCore.resourceFileName, result);
+
+            Console.ReadKey();
         }
     }
 }
