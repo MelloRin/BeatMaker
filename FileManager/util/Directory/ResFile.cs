@@ -1,4 +1,4 @@
-﻿namespace FileManager.lib.Directory
+﻿namespace FileManager.util.Directory
 {
     public class ResFile
     {
@@ -6,7 +6,7 @@
         public readonly string name;
         public readonly short id;
 
-        public ResFile(short id, string name, byte[] rawData)
+        internal ResFile(short id, string name, byte[] rawData)
         {
             this.id = id;
             this.name = name;

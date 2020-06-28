@@ -3,7 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace MelloRin.FileManager.lib.Encrypt
+namespace FileManager.util.Encrypt
 {
     public class AES256Manager
     {

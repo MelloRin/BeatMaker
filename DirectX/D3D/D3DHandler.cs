@@ -1,7 +1,8 @@
 ﻿using DirectX.D2D;
 using DirectX.D2D.Font;
-using DirectX.lib;
-using MelloRin.CSd3d.Core;
+using DirectX.lib.Interface;
+using DirectX.util;
+using DirectX.util.Task;
 using SharpDX;
 using SharpDX.Direct3D;
 using SharpDX.Direct3D11;
@@ -103,7 +104,7 @@ namespace DirectX.D3D
                 };
             }));
 
-            FeatureLevel[] levels = new FeatureLevel[] { FeatureLevel.Level_11_0, FeatureLevel.Level_12_0 };
+            FeatureLevel[] levels = new FeatureLevel[] { FeatureLevel.Level_11_0 };
             DeviceCreationFlags flag = DeviceCreationFlags.None | DeviceCreationFlags.BgraSupport;
 
             Device.CreateWithSwapChain(DriverType.Hardware, flag, levels, desc, out _device, out _swapChain);
@@ -157,11 +158,19 @@ namespace DirectX.D3D
         public void Dispose()
         {
             if (_device != null)
+            {
                 _device.Dispose();
+            }
+
             if (font != null)
+            {
                 font.Dispose();
+            }
+
             if (timer != null)
+            {
                 timer.Dispose();
+            }
         }
     }
 }

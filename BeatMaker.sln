@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResourcePacker", "ResourceP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unitTester", "..\..\C#unitTester\unitTester\unitTester.csproj", "{4F6E42CD-D3A4-493E-8E7B-605097939C58}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaveDataManager", "SaveDataManager\SaveDataManager.csproj", "{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +63,14 @@ Global
 		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Release|x64.ActiveCfg = Release|x64
 		{4F6E42CD-D3A4-493E-8E7B-605097939C58}.Release|x64.Build.0 = Release|x64
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Debug|x64.Build.0 = Debug|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Release|x64.ActiveCfg = Release|Any CPU
+		{B5347D93-B9B9-4A7B-A922-13E0888C0ECE}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

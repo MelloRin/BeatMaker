@@ -1,4 +1,4 @@
-﻿namespace DirectX.lib
+﻿namespace DirectX.util.Interface
 {
     public class ListData
 	{

@@ -90,21 +90,30 @@
     <Compile Include="D2D\D2DSprite.cs" />
     <Compile Include="D2D\Font\FontData.cs" />
     <Compile Include="D2D\Font\FontLoader.cs" />
+    <Compile Include="util\Font\ResourceFontFileEnumerator.cs" />
+    <Compile Include="util\Font\ResourceFontFileStream.cs" />
     <Compile Include="D2D\Sprite\ClickableSprite.cs" />
     <Compile Include="D2D\Sprite\SpriteData.cs" />
     <Compile Include="D3D\D3DHandler.cs" />
-    <Compile Include="lib\ClickEvent\ClickEventStack.cs" />
-    <Compile Include="lib\ClickEvent\ClickEventStackData.cs" />
-    <Compile Include="lib\IDrawable.cs" />
-    <Compile Include="lib\IListable.cs" />
-    <Compile Include="lib\ITask.cs" />
-    <Compile Include="lib\ListData.cs" />
-    <Compile Include="lib\RenderTaskHandler.cs" />
-    <Compile Include="lib\TaskQueue.cs" />
+    <Compile Include="util\ClickEvent\ClickEventStack.cs" />
+    <Compile Include="util\ClickEvent\ClickEventStackData.cs" />
+    <Compile Include="util\Interface\IDrawable.cs" />
+    <Compile Include="util\Interface\IListable.cs" />
+    <Compile Include="util\Interface\ITask.cs" />
+    <Compile Include="util\Interface\ListData.cs" />
+    <Compile Include="util\Interface\RenderTaskHandler.cs" />
+    <Compile Include="util\Task\TaskQueue.cs" />
+    <Compile Include="util\Task\QueueData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FileManager\FileManager.csproj">
+      <Project>{8a44ab32-8c5a-4e57-a457-84692f0aa067}</Project>
+      <Name>FileManager</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

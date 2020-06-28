@@ -1,7 +1,6 @@
-﻿using FileManager.lib.Log;
-using MelloRin.FileManager.lib.Encrypt;
-using MelloRin.FileManager.lib.UUID;
-using System;
+﻿using FileManager.util.Encrypt;
+using FileManager.util.Log;
+using FileManager.util.UUID;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -24,7 +23,7 @@ namespace FileManager
         public static readonly string dataPackageDir = Path.Combine(currentDir, resourceFileName);
         public static readonly string saveFileDir = Path.Combine(currentDir, saveFileName);
 
-        public static readonly Logger logger = new Logger();
+        public static readonly Logger logger = new Logger(logFileName);
 
         private static readonly FileManagerCore inst = new FileManagerCore();
 

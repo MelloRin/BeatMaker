@@ -1,5 +1,6 @@
 ﻿using DirectX.D2D.Sprite;
-using DirectX.lib;
+using DirectX.lib.Interface;
+using DirectX.util.Interface;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
@@ -14,7 +15,7 @@ using System.Linq;
 
 using Bitmap = SharpDX.Direct2D1.Bitmap;
 
-namespace MelloRin.CSd3d.Core
+namespace DirectX.D2D
 {
     public class D2DSprite : IDisposable, IListable, IDrawable
     {

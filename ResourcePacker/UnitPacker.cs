@@ -1,6 +1,6 @@
 ﻿using FileManager;
-using MelloRin.FileManager.lib.Encrypt;
-using MelloRin.FileManager.lib.UUID;
+using FileManager.util.Encrypt;
+using FileManager.util.UUID;
 using System;
 using System.Collections.Generic;
 using System.IO;

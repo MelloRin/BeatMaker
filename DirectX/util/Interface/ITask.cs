@@ -1,6 +1,6 @@
-﻿using DirectX.Lib;
+﻿using DirectX.util.Task;
 
-namespace DirectX.lib
+namespace DirectX.lib.Interface
 {
     public interface ITask
     {

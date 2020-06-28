@@ -1,16 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using FileManager.util.Directory;
+using System.Collections.Generic;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace FileManager.lib.Directory
+namespace FileManager
 {
-    public class ResDirectoryManager
+    public class ResourceManageCore
     {
         private readonly Dictionary<short, string> nameData;
         private readonly Dictionary<short, ResDirectory> directoryData;
         private ResDirectory baseDir;
 
-        public ResDirectoryManager()
+        public ResourceManageCore()
         {
             nameData = new Dictionary<short, string>();
             directoryData = new Dictionary<short, ResDirectory>();
@@ -24,7 +26,7 @@ namespace FileManager.lib.Directory
 
             string[] dirs = dir.Split('/');
 
-            ResDirectory resDir = null;
+            ResDirectory resDir = baseDir;
 
             for (int level = 1; level < dirs.Length - 1; ++level)
             {
@@ -37,6 +39,28 @@ namespace FileManager.lib.Directory
             return true;
         }
 
+        public bool getDirectory(out ResDirectory result, string dir)
+        {
+            result = null;
+            if (!dir.StartsWith("/"))
+                return false;
+
+            string[] dirs = dir.Split('/');
+
+            ResDirectory resDir = baseDir;
+
+            for (int level = 1; level < dirs.Length - 1; ++level)
+            {
+                if (!baseDir.getChildDir(out resDir, dirs[level]))
+                    return false;
+            }
+
+            resDir.getChildDir(out result, dirs[dirs.Length - 1]);
+
+            return true;
+        }
+
+        [MethodImpl(MethodImplOptions.Synchronized)]
         public void readResource(string resourceFileDir)
         {
             BinaryReader reader = new BinaryReader(File.Open(resourceFileDir, FileMode.Open));
@@ -95,7 +119,6 @@ namespace FileManager.lib.Directory
                 short nameID = headerReader.ReadInt16();
                 long offset = headerReader.ReadInt64();
                 long size = headerReader.ReadInt64();
-
 
                 byte[] data = new byte[size];
                 FileManagerCore.readBytes(data, offset, reader.BaseStream);

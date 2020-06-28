@@ -1,159 +1,79 @@
-﻿using SharpDX;
+﻿// Copyright (c) 2010-2013 SharpDX - Alexandre Mutel
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+//source from https://github.com/sharpdx/SharpDX-Samples/blob/master/Desktop/DirectWrite/CustomFont/ResourceFontLoader.cs
+
+//some parts are moded by MelloRin
+
+using DirectX.util.Font;
+using FileManager;
+using FileManager.util.Directory;
+using SharpDX;
 using SharpDX.DirectWrite;
-using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace DirectX.D2D.Font
 {
-    public class ResourceFontFileStream : CallbackBase, FontFileStream
-    {
-        private readonly DataStream _stream;
-
-
-        public ResourceFontFileStream(DataStream stream)
-        {
-            _stream = stream;
-        }
-
-        void FontFileStream.ReadFileFragment(out IntPtr fragmentStart, long fileOffset, long fragmentSize, out IntPtr fragmentContext)
-        {
-            lock (this)
-            {
-                fragmentContext = IntPtr.Zero;
-                _stream.Position = fileOffset;
-                fragmentStart = _stream.PositionPointer;
-            }
-        }
-
-        void FontFileStream.ReleaseFileFragment(IntPtr fragmentContext)
-        {
-            // Nothing to release. No context are used
-        }
-
-        long FontFileStream.GetFileSize()
-        {
-            return _stream.Length;
-        }
-
-        long FontFileStream.GetLastWriteTime()
-        {
-            return 0;
-        }
-    }
-
-    class ResourceFontFileEnumerator : CallbackBase, FontFileEnumerator
-    {
-        private Factory _factory;
-        private FontFileLoader _loader;
-        private DataStream keyStream;
-        private FontFile _currentFontFile;
-
-
-        public ResourceFontFileEnumerator(Factory factory, FontFileLoader loader, DataPointer key)
-        {
-            _factory = factory;
-            _loader = loader;
-            keyStream = new DataStream(key.Pointer, key.Size, true, false);
-        }
-
-        bool FontFileEnumerator.MoveNext()
-        {
-            bool moveNext = keyStream.RemainingLength != 0;
-            if (moveNext)
-            {
-                if (_currentFontFile != null)
-                    _currentFontFile.Dispose();
-
-                _currentFontFile = new FontFile(_factory, keyStream.PositionPointer, 4, _loader);
-                keyStream.Position += 4;
-            }
-            return moveNext;
-        }
-
-        FontFile FontFileEnumerator.CurrentFontFile
-        {
-            get
-            {
-                ((IUnknown)_currentFontFile).AddReference();
-                return _currentFontFile;
-            }
-        }
-    }
-
-    public partial class ResourceFontLoader : CallbackBase, FontCollectionLoader, FontFileLoader
+    public partial class FontLoader : CallbackBase, FontCollectionLoader, FontFileLoader
     {
         private readonly List<ResourceFontFileStream> _fontStreams = new List<ResourceFontFileStream>();
         private readonly List<ResourceFontFileEnumerator> _enumerators = new List<ResourceFontFileEnumerator>();
-        private readonly DataStream _keyStream;
         private readonly Factory _factory;
 
-        public bool resultAvailable;
-
-        /*public ResourceFontLoader(Factory factory, string[] fontFile)
-		{
-			_factory = factory;
-
-			foreach(string currentFontFile in fontFile)
-			{
-				if (File.Exists(currentFontFile))
-				{
-					var fontBytes = Utilities.ReadStream(typeof(ResourceFontLoader).Assembly.GetManifestResourceStream(currentFontFile));
-					var stream = new DataStream(fontBytes.Length, true, true);
-					stream.Write(fontBytes, 0, fontBytes.Length);
-					stream.Position = 0;
-					_fontStreams.Add(new ResourceFontFileStream(stream));
-
-					// Build a Key storage that stores the index of the font
-					_keyStream = new DataStream(sizeof(int) * _fontStreams.Count, true, true);
-					for (int i = 0; i < _fontStreams.Count; i++)
-						_keyStream.Write(i);
-					_keyStream.Position = 0;
-
-					// Register the 
-					_factory.RegisterFontFileLoader(this);
-					_factory.RegisterFontCollectionLoader(this);
-					resultAvailable = true;
-				}
-			}
-			//resultAvailable = false;
-		}*/
-
-
-        public ResourceFontLoader(Factory factory, string[] fontFile)
+        public FontLoader(/*Factory factory*/ResourceManageCore resourceCore, string searchDir)
         {
-            _factory = factory;
-            foreach (string currentFontFile in fontFile)
+            _factory = new Factory();
+            //_factory = factory;
+
+            FileManagerCore.logger.Info(this, "Loading Fonts from " + searchDir);
+            if (resourceCore.getDirectory(out ResDirectory resDirectory, searchDir))
             {
-                if (File.Exists(currentFontFile))
+                foreach (string name in resDirectory.getChildFileList())
                 {
-                    var fontBytes = Utilities.ReadStream(File.OpenRead(currentFontFile));
-                    var stream = new DataStream(fontBytes.Length, true, true);
-                    stream.Write(fontBytes, 0, fontBytes.Length);
-                    stream.Position = 0;
-                    _fontStreams.Add(new ResourceFontFileStream(stream));
+                    if (name.EndsWith(".ttf"))
+                    {
+                        FileManagerCore.logger.Info(this, "Fonts file found! " + name);
+                        resourceCore.getFile(out ResFile resfile, searchDir + "/" + name);
+
+                        DataStream stream = new DataStream(resfile.rawData.Length, true, true);
+                        stream.Write(resfile.rawData, 0, resfile.rawData.Length);
+                        stream.Position = 0;
+                        _fontStreams.Add(new ResourceFontFileStream(stream));
+                    }
                 }
             }
+            FileManagerCore.logger.Info(this, "Loading Fonts Success!");
 
-            // Build a Key storage that stores the index of the font
-            _keyStream = new DataStream(sizeof(int) * _fontStreams.Count, true, true);
+            Key = new DataStream(sizeof(int) * _fontStreams.Count, true, true);
             for (int i = 0; i < _fontStreams.Count; i++)
-                _keyStream.Write(i);
-            _keyStream.Position = 0;
+            {
+                Key.Write(i);
+            }
 
-            // Register the 
+            Key.Position = 0;
+
             _factory.RegisterFontFileLoader(this);
             _factory.RegisterFontCollectionLoader(this);
         }
 
-
-        public DataStream Key
-        {
-            get
-            {
-                return _keyStream;
-            }
-        }
+        public DataStream Key { get; }
 
         FontFileEnumerator FontCollectionLoader.CreateEnumeratorFromKey(Factory factory, DataPointer collectionKey)
         {

@@ -1,4 +1,4 @@
-﻿using DirectX.lib;
+﻿using DirectX.util.Interface;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
 using System;
@@ -51,6 +51,9 @@ namespace DirectX.D2D.Font
 
             //CurrentTextFormat = new TextFormat(FactoryDWrite, FontFamilyName, CurrentFontCollection, FontWeight.Normal, FontStyle.Normal, FontStretch.Normal, 64) 
             //{ TextAlignment = TextAlignment.Center, ParagraphAlignment = ParagraphAlignment.Center };
+
+
+
 
             _directWriteTextFormat = new TextFormat(directWriteFactory, fontName, fontSize)
             { TextAlignment = TextAlignment.Leading, ParagraphAlignment = ParagraphAlignment.Near };

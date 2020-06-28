@@ -1,8 +1,7 @@
 ﻿using DirectX.D2D;
-using MelloRin.CSd3d.Core;
 using SharpDX.Windows;
 
-namespace DirectX.lib
+namespace DirectX.util
 {
     public class RenderTaskHandler
     {

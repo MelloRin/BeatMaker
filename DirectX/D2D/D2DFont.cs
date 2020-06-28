@@ -1,4 +1,5 @@
-﻿using DirectX.lib;
+﻿using DirectX.D2D.Font;
+using DirectX.util.Interface;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
@@ -28,7 +29,7 @@ namespace DirectX.D2D
         {
             var d2dFactory = new SharpDX.Direct2D1.Factory();
             var d2dSurface = backBuffer.QueryInterface<Surface>();
-            renderTarget = new RenderTarget(d2dFactory, d2dSurface, new RenderTargetProperties(new PixelFormat(Format.Unknown, SharpDX.Direct2D1.AlphaMode.Premultiplied)));
+            renderTarget = new RenderTarget(d2dFactory, d2dSurface, new RenderTargetProperties(new PixelFormat(Format.B8G8R8A8_UNorm, SharpDX.Direct2D1.AlphaMode.Premultiplied)));
 
             d2dSurface.Dispose();
             d2dFactory.Dispose();
@@ -81,8 +82,11 @@ namespace DirectX.D2D
                 {
                     FontData drawTarget = _Ldraw[key];
                     renderTarget.DrawText(drawTarget.text, drawTarget._directWriteTextFormat,
-                        new RawRectangleF(drawTarget.x, drawTarget.y, float.Parse(GlobalDataManager.settings.getSetting("width")), float.Parse(GlobalDataManager.settings.getSetting("width"))),
+                        new RawRectangleF(drawTarget.x, drawTarget.y, 1280, 720),
                         drawTarget._directWriteFontColor);
+                    /*new RawRectangleF(drawTarget.x, drawTarget.y, float.Parse(GlobalDataManager.settings.getSetting("width")), float.Parse(GlobalDataManager.settings.getSetting("width"))),
+                    drawTarget._directWriteFontColor);*/
+
                 }
                 catch (Exception) { }
             }

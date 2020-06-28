@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace MelloRin.FileManager.lib.UUID
+namespace FileManager.util.UUID
 {
     public class UUIDManager
     {

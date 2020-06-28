@@ -1,4 +1,4 @@
-﻿using DirectX.lib;
+﻿using DirectX.util.Interface;
 using SharpDX.Direct2D1;
 using System;
 

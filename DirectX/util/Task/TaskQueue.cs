@@ -1,20 +1,11 @@
-﻿namespace DirectX.lib
+﻿using DirectX.lib.Interface;
+
+namespace DirectX.util.Task
 {
     public class TaskQueue
     {
         private QueueData head = null;
         private bool running = false;
-
-        private class QueueData
-        {
-            private QueueData nextData = null;
-            public ITask task { get; }
-
-            public QueueData(ITask task) => this.task = task;
-
-            public QueueData getNext() => nextData;
-            public void setNext(QueueData next) => nextData = next;
-        }
 
         public void addTask(ITask data)
         {

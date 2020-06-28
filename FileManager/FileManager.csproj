@@ -63,13 +63,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="lib\Directory\ResDirectory.cs" />
-    <Compile Include="lib\Directory\ResDirectoryManager.cs" />
-    <Compile Include="lib\Directory\ResFile.cs" />
-    <Compile Include="lib\Encrypt\AES256Manager.cs" />
+    <Compile Include="util\Directory\ResDirectory.cs" />
+    <Compile Include="ResourceManageCore.cs" />
+    <Compile Include="util\Directory\ResFile.cs" />
+    <Compile Include="util\Encrypt\AES256Manager.cs" />
     <Compile Include="FileManagerCore.cs" />
-    <Compile Include="lib\Log\Logger.cs" />
-    <Compile Include="lib\UUID\UUIDManager.cs" />
+    <Compile Include="util\Log\Logger.cs" />
+    <Compile Include="util\UUID\UUIDManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

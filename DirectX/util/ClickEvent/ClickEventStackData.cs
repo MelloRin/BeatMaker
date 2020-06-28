@@ -1,4 +1,4 @@
-﻿namespace DirectX.lib.ClickEvent
+﻿namespace DirectX.util.ClickEvent
 {
     public class ClickEventStackData<E>
     {

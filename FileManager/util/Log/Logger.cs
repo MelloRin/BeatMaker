@@ -1,21 +1,40 @@
-﻿using System;
+﻿/*
+MIT License
+Copyright (c) 2019 Heiswayi Nrird
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+// SimpleLogger.cs from https://gist.github.com/heiswayi/69ef5413c0f28b3a58d964447c275058
+// some parts are moded by MelloRin
+
+using System;
 using System.Runtime.CompilerServices;
 
-namespace FileManager.lib.Log
+namespace FileManager.util.Log
 {
     public class Logger
     {
         private readonly string datetimeFormat;
         private readonly string logFilename;
 
-        /// <summary>
-        /// Initiate an instance of SimpleLogger class constructor.
-        /// If log file does not exist, it will be created automatically.
-        /// </summary>
-        internal Logger()
+        internal Logger(string filename)
         {
-            datetimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
-            logFilename = FileManagerCore.logFileName;
+            datetimeFormat = "yyyy-MM-dd HH:mm:ss.ff";
+            logFilename = filename;
 
             // Log file header line
             string logHeader = logFilename + " is created.";
@@ -25,61 +44,31 @@ namespace FileManager.lib.Log
             }
         }
 
-        /// <summary>
-        /// Log a DEBUG message
-        /// </summary>
-        /// <param name="obj">Called calss</param>
-        /// <param name="text">Message</param>
         public void Debug(object obj, string text)
         {
             WriteFormattedLog(LogLevel.DEBUG, obj, text);
         }
 
-        /// <summary>
-        /// Log an ERROR message
-        /// </summary>
-        /// <param name="obj">Called calss</param>
-        /// <param name="text">Message</param>
         public void Error(object obj, string text)
         {
             WriteFormattedLog(LogLevel.ERROR, obj, text);
         }
 
-        /// <summary>
-        /// Log a FATAL ERROR message
-        /// </summary>
-        /// <param name="obj">Called calss</param>
-        /// <param name="text">Message</param>
         public void Fatal(object obj, string text)
         {
             WriteFormattedLog(LogLevel.FATAL, obj, text);
         }
 
-        /// <summary>
-        /// Log an INFO message
-        /// </summary>
-        /// <param name="obj">Called calss</param>
-        /// <param name="text">Message</param>
         public void Info(object obj, string text)
         {
             WriteFormattedLog(LogLevel.INFO, obj, text);
         }
-
-        /// <summary>
-        /// Log a TRACE message
-        /// </summary>
-        /// <param name="obj">Called calss</param>
-        /// <param name="text">Message</param>
+        
         public void Trace(object obj, string text)
         {
             WriteFormattedLog(LogLevel.TRACE, obj, text);
         }
 
-        /// <summary>
-        /// Log a WARNING message
-        /// </summary>
-        /// <param name="obj">Called calss</param>
-        /// <param name="text">Message</param>
         public void Warning(object obj, string text)
         {
             WriteFormattedLog(LogLevel.WARNING, obj, text);

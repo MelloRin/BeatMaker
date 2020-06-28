@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 
-namespace FileManager.lib.Directory
+namespace FileManager.util.Directory
 {
-    class ResDirectory
+    public class ResDirectory
     {
         public readonly short id;
         public readonly string dirName;
@@ -11,7 +10,7 @@ namespace FileManager.lib.Directory
         private readonly Dictionary<string, ResDirectory> childDirs;
         private readonly Dictionary<string, ResFile> childFiles;
 
-        public ResDirectory(short id, string dirName)
+        internal ResDirectory(short id, string dirName)
         {
             this.id = id;
             this.dirName = dirName;
@@ -32,12 +31,18 @@ namespace FileManager.lib.Directory
 
         public string[] getChildDirList()
         {
-            return childDirs.Keys.ToArray();
+            string[] keys = new string[childDirs.Keys.Count];
+            childDirs.Keys.CopyTo(keys, 0);
+
+            return keys;
         }
 
         public string[] getChildFileList()
         {
-            return childFiles.Keys.ToArray();
+            string[] keys = new string[childFiles.Keys.Count];
+            childFiles.Keys.CopyTo(keys, 0);
+
+            return keys;
         }
 
         public bool getChildDir(out ResDirectory resDir, string childName)
