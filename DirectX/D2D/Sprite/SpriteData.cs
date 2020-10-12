@@ -16,6 +16,7 @@ namespace DirectX.D2D.Sprite
             this.bitmapBrush = bitmapBrush;
         }
 
+
         public void Dispose()
         {
             if (bitmapBrush != null)

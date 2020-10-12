@@ -126,7 +126,7 @@ namespace ResourcePacker
                 FileManagerCore.byteBoundaryWork(headerMaker, true);
             }
 
-            FileManagerCore.logger.Info(this, "file paccking done!");
+            FileManagerCore.logger.Info(this, "file packing done!");
 
             ms.Position = resumePosition;
 

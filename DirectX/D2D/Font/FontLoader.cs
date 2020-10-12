@@ -43,14 +43,14 @@ namespace DirectX.D2D.Font
             //_factory = factory;
 
             FileManagerCore.logger.Info(this, "Loading Fonts from " + searchDir);
-            if (resourceCore.getDirectory(out ResDirectory resDirectory, searchDir))
+            if (resourceCore.getDirectory(searchDir, out ResDirectory resDirectory))
             {
                 foreach (string name in resDirectory.getChildFileList())
                 {
                     if (name.EndsWith(".ttf"))
                     {
                         FileManagerCore.logger.Info(this, "Fonts file found! " + name);
-                        resourceCore.getFile(out ResFile resfile, searchDir + "/" + name);
+                        resourceCore.getFile(searchDir + "/" + name, out ResFile resfile);
 
                         DataStream stream = new DataStream(resfile.rawData.Length, true, true);
                         stream.Write(resfile.rawData, 0, resfile.rawData.Length);

@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DirectX</RootNamespace>
     <AssemblyName>DirectX</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
@@ -98,10 +98,12 @@
     <Compile Include="util\ClickEvent\ClickEventStack.cs" />
     <Compile Include="util\ClickEvent\ClickEventStackData.cs" />
     <Compile Include="util\Interface\IDrawable.cs" />
+    <Compile Include="util\Interface\IFrameTimeTask.cs" />
     <Compile Include="util\Interface\IListable.cs" />
     <Compile Include="util\Interface\ITask.cs" />
     <Compile Include="util\Interface\ListData.cs" />
-    <Compile Include="util\Interface\RenderTaskHandler.cs" />
+    <Compile Include="util\Interface\RenderTaskHandle.cs" />
+    <Compile Include="util\Sprite\SpriteFactory.cs" />
     <Compile Include="util\Task\TaskQueue.cs" />
     <Compile Include="util\Task\QueueData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

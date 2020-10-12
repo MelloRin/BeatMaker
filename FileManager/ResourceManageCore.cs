@@ -18,7 +18,7 @@ namespace FileManager
             directoryData = new Dictionary<short, ResDirectory>();
         }
 
-        public bool getFile(out ResFile result, string dir)
+        public bool getFile(string dir, out ResFile result)
         {
             result = null;
             if (!dir.StartsWith("/"))
@@ -34,12 +34,10 @@ namespace FileManager
                     return false;
             }
 
-            resDir.getChildFile(out result, dirs[dirs.Length - 1]);
-
-            return true;
+            return resDir.getChildFile(out result, dirs[dirs.Length - 1]);
         }
 
-        public bool getDirectory(out ResDirectory result, string dir)
+        public bool getDirectory(string dir, out ResDirectory result)
         {
             result = null;
             if (!dir.StartsWith("/"))

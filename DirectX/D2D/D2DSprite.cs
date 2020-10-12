@@ -1,27 +1,22 @@
 ﻿using DirectX.D2D.Sprite;
-using DirectX.lib.Interface;
+using DirectX.D3D;
 using DirectX.util.Interface;
 using SharpDX;
 using SharpDX.Direct2D1;
 using SharpDX.Direct3D11;
 using SharpDX.DXGI;
-using SharpDX.IO;
-using SharpDX.WIC;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-
-using Bitmap = SharpDX.Direct2D1.Bitmap;
 
 namespace DirectX.D2D
 {
     public class D2DSprite : IDisposable, IListable, IDrawable
     {
-        public static ConcurrentDictionary<string, SpriteData> _LBackgroundSprite { get; private set; }
-        public static Dictionary<string, SpriteData> _LSprite { get; private set; }
-        public static ConcurrentDictionary<string, ClickableSprite> _LClickableSprite { get; private set; }
+        private readonly ConcurrentDictionary<string, SpriteData> _LBackgroundSprite;
+        private readonly Dictionary<string, SpriteData> _LSprite;
+        private readonly ConcurrentDictionary<string, ClickableSprite> _LClickableSprite;
 
         public RenderTarget renderTarget { get; private set; }
 
@@ -32,74 +27,25 @@ namespace DirectX.D2D
             _LClickableSprite = new ConcurrentDictionary<string, ClickableSprite>();
 
 
-            var d2dFactory = new SharpDX.Direct2D1.Factory();
-            var d2dSurface = backBuffer.QueryInterface<Surface>();
-            renderTarget = new RenderTarget(d2dFactory, d2dSurface, new RenderTargetProperties(new SharpDX.Direct2D1.PixelFormat(Format.Unknown, SharpDX.Direct2D1.AlphaMode.Premultiplied)));
+            SharpDX.Direct2D1.Factory d2dFactory = new SharpDX.Direct2D1.Factory();
+            Surface d2dSurface = backBuffer.QueryInterface<Surface>();
+            renderTarget = new RenderTarget(d2dFactory, d2dSurface, new RenderTargetProperties(new SharpDX.Direct2D1.PixelFormat(D3DHandler.RENDER_FORMAT, D3DHandler.ALPHA_MODE)));
 
             d2dSurface.Dispose();
             d2dFactory.Dispose();
         }
 
-        public static void resetData()
+        public SpriteData getSprite(string tag)
         {
-            _LSprite = new Dictionary<string, SpriteData>();
-            _LClickableSprite = new ConcurrentDictionary<string, ClickableSprite>();
+            _LSprite.TryGetValue(tag, out SpriteData value);
+
+            return value;
         }
 
-        public static BitmapBrush makeBitmapBrush(RenderTarget renderTarget, string imgName, bool blankImage = false)
+        public void resetData()
         {
-            //TODO : 여기 바꿔라!
-            string imageSrc = "";
-
-            if (blankImage)
-            {
-                var pf = new SharpDX.Direct2D1.PixelFormat()
-                {
-                    AlphaMode = SharpDX.Direct2D1.AlphaMode.Premultiplied,
-                    Format = Format.B8G8R8A8_UNorm
-                };
-
-                BitmapRenderTarget pallete = new BitmapRenderTarget(renderTarget, CompatibleRenderTargetOptions.GdiCompatible, pf);
-                return new BitmapBrush(renderTarget, pallete.Bitmap, new BitmapBrushProperties() { ExtendModeX = ExtendMode.Wrap, ExtendModeY = ExtendMode.Wrap });
-            }
-            if (File.Exists(imageSrc))
-            {
-                ImagingFactory imagingFactory = new ImagingFactory();
-                NativeFileStream fileStream = new NativeFileStream(imageSrc,
-                    NativeFileMode.Open, NativeFileAccess.Read);
-                BitmapDecoder bitmapDecoder = new BitmapDecoder(imagingFactory, fileStream, DecodeOptions.CacheOnDemand);
-
-                BitmapFrameDecode frame = bitmapDecoder.GetFrame(0);
-
-                FormatConverter converter = new FormatConverter(imagingFactory);
-                converter.Initialize(frame, SharpDX.WIC.PixelFormat.Format32bppPRGBA);
-
-                Bitmap bitmap = Bitmap.FromWicBitmap(renderTarget, converter);
-
-                Utilities.Dispose(ref bitmapDecoder);
-                Utilities.Dispose(ref fileStream);
-                Utilities.Dispose(ref imagingFactory);
-                Utilities.Dispose(ref converter);
-
-                return new BitmapBrush(renderTarget, bitmap, new BitmapBrushProperties() { ExtendModeX = ExtendMode.Wrap, ExtendModeY = ExtendMode.Wrap });
-            }
-            else
-            {
-                Console.WriteLine("{0} missing", imageSrc);
-
-                var pf = new SharpDX.Direct2D1.PixelFormat()
-                {
-                    AlphaMode = SharpDX.Direct2D1.AlphaMode.Premultiplied,
-                    Format = Format.B8G8R8A8_UNorm
-                };
-                BitmapRenderTarget pallete = new BitmapRenderTarget(renderTarget, CompatibleRenderTargetOptions.GdiCompatible, new Size2F(30f, 30f), new Size2(1, 1), pf);
-
-                pallete.BeginDraw();
-                pallete.Clear(Color.Purple);
-                pallete.EndDraw();
-
-                return new BitmapBrush(renderTarget, pallete.Bitmap, new BitmapBrushProperties() { ExtendModeX = ExtendMode.Wrap, ExtendModeY = ExtendMode.Wrap });
-            }
+            _LSprite.Clear();
+            _LClickableSprite.Clear();
         }
 
         public void modPoint(string tag, int x, int y)
@@ -134,25 +80,30 @@ namespace DirectX.D2D
                 }
             }
 
-            string[] _LrenderQueue = _LSprite.Keys.ToArray();
-            for (int i = 0; i < _LrenderQueue.Length; ++i)
+            if(_LSprite.Count > 0)
             {
-                try
+                string[] _LrenderQueue = _LSprite.Keys.ToArray();
+                for (int i = 0; i < _LrenderQueue.Length; ++i)
                 {
-                    string key = _LrenderQueue[i];
-                    SpriteData drawTarget = _LSprite[key];
-
-                    if (_LSprite[key].bitmapBrush != null)
+                    try
                     {
-                        renderTarget.Transform = Matrix3x2.Translation(drawTarget.x, drawTarget.y);
-                        renderTarget.FillRectangle(new RectangleF(0, 0, drawTarget.bitmapBrush.Bitmap.Size.Width, drawTarget.bitmapBrush.Bitmap.Size.Height), drawTarget.bitmapBrush);
+                        string key = _LrenderQueue[i];
+                        SpriteData drawTarget = _LSprite[key];
+
+                        if (_LSprite[key].bitmapBrush != null)
+                        {
+                            renderTarget.Transform = Matrix3x2.Translation(drawTarget.x, drawTarget.y);
+                            renderTarget.FillRectangle(new RectangleF(0, 0, drawTarget.bitmapBrush.Bitmap.Size.Width, drawTarget.bitmapBrush.Bitmap.Size.Height), drawTarget.bitmapBrush);
+                        }
+                    }
+                    catch (KeyNotFoundException)
+                    {
+
                     }
                 }
-                catch (KeyNotFoundException)
-                {
-
-                }
             }
+            
+
             foreach (string key in _LClickableSprite.Keys)
             {
                 SpriteData drawTarget = _LClickableSprite[key];

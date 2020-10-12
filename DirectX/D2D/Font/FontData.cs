@@ -1,6 +1,8 @@
 ﻿using DirectX.util.Interface;
+using FileManager;
 using SharpDX.Direct2D1;
 using SharpDX.DirectWrite;
+using SharpDX.Mathematics.Interop;
 using System;
 
 using Color = SharpDX.Color4;
@@ -18,12 +20,18 @@ namespace DirectX.D2D.Font
         private string fontName;
         private float fontSize;
 
+        private readonly FontCollection fontCollection;
+
         public TextFormat _directWriteTextFormat { get; private set; }
         public SolidColorBrush _directWriteFontColor { get; private set; }
 
-        public FontData(string text, RenderTarget renderTarget, Color fontColor, int x = 0, int y = 0,
+        public readonly RawRectangleF textBox;
+
+        public FontData(string text, RenderTarget renderTarget, FontCollection fontCollection, Color fontColor, int x = 0, int y = 0,
             float fontSize = 28, string fontName = "font.ttf")
         {
+            this.fontCollection = fontCollection;
+            textBox = new RawRectangleF(x, y, 1280, 720); 
             this.renderTarget = renderTarget;
             this.text = text;
             this.fontName = fontName;
@@ -55,10 +63,10 @@ namespace DirectX.D2D.Font
 
 
 
-            _directWriteTextFormat = new TextFormat(directWriteFactory, fontName, fontSize)
+            _directWriteTextFormat = new TextFormat(directWriteFactory, fontName, fontCollection, FontWeight.Normal, FontStyle.Normal, FontStretch.Normal, fontSize)
             { TextAlignment = TextAlignment.Leading, ParagraphAlignment = ParagraphAlignment.Near };
 
-            Console.WriteLine("현재 폰트명 : {0}", _directWriteTextFormat.FontFamilyName);
+            FileManagerCore.logger.Info(this, "로드된 폰트명 : " + _directWriteTextFormat.FontFamilyName);
 
             _directWriteFontColor = new SolidColorBrush(renderTarget, fontColor);
             directWriteFactory.Dispose();
